@@ -83,7 +83,7 @@ function LandingPage() {
                         <Form.Control as="textarea" rows={3} onChange={(e) => setOriginalPrompt(e.target.value)} />
                     </Form.Group>
                 </Form>
-                <Button onClick={(e) => handleSubmit(e)} disabled={loadingOne || loadingTwo}>Submit</Button>
+                <Button onClick={(e) => handleSubmit(e)} disabled={loadingOne || loadingTwo} variant='danger'>Submit</Button>
                 <h1 className='h1-action'>Jailbreak results:</h1>
                 <br />
                 <br />
