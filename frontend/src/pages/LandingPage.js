@@ -13,15 +13,40 @@ import Footer from '../utils/Footer'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/LandingPage.css';
 
+export const baseUrl = "http://localhost:8000"
+
 function LandingPage() {
     const [originalPrompt, setOriginalPrompt] = useState("")
     const [originalOutput, setOriginalOutput] = useState("")
-    const [jailbrokenPrompt, setJailbrokenPrompt] = useState("")
+    const [jailbrokenPrompt, setJailbrokenPrompt] = useState("Prompts not provided pending ethical disclosure.")
     const [jailbrokenOutput, setJailbrokenOutput] = useState("")
+
+    const [loadingOne, setLoadingOne] = useState(false)
+    const [loadingTwo, setLoadingTwo] = useState(false)
 
     function handleSubmit(e) {
         e.preventDefault()
-        alert(originalPrompt)
+        setLoadingOne(true)
+        setLoadingTwo(true)
+        setOriginalOutput("")
+        setJailbrokenOutput("")
+
+        fetch(baseUrl + '/client/get-original-response?' + new URLSearchParams({
+            request: originalPrompt
+        }))
+            .then(results => results.json())
+            .then(data => {
+                setOriginalOutput(data)
+                setLoadingOne(false)
+            })
+        fetch(baseUrl + '/client/get-jailbroken-response?' + new URLSearchParams({
+            request: originalPrompt
+        }))
+            .then(results => results.json())
+            .then(data => {
+                setJailbrokenOutput(data)
+                setLoadingTwo(false)
+            })
     }
 
     return (
@@ -58,7 +83,7 @@ function LandingPage() {
                         <Form.Control as="textarea" rows={3} onChange={(e) => setOriginalPrompt(e.target.value)} />
                     </Form.Group>
                 </Form>
-                <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
+                <Button onClick={(e) => handleSubmit(e)} disabled={loadingOne || loadingTwo}>Submit</Button>
                 <h1 className='h1-action'>Jailbreak results:</h1>
                 <br />
                 <br />
