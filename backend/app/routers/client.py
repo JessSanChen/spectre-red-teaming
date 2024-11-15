@@ -30,9 +30,8 @@ async def getOriginalResponse(request: str):
 
 @router.get("/get-jailbroken-response", tags=['client'], status_code=status.HTTP_200_OK)
 async def getJailbrokenResponse(request: str):
-    # TODO: transform request to jailbroken request
     def categorize(request):
-        with open("categorize.txt", 'r') as file:
+        with open("./routers/categorize.txt", 'r') as file:
             categorize_prompt = file.read()
         input_data = {
             "model": "neuralmagic/Meta-Llama-3.1-70B-Instruct-FP8",
@@ -47,7 +46,7 @@ async def getJailbrokenResponse(request: str):
 
     def language_obf(request):
         # extract specific name
-        with open("obf_input.txt", 'r') as file:
+        with open("./routers/obf_input.txt", 'r') as file:
             mailicious_prompt = file.read()
         obf_input_data = {
             "model": "neuralmagic/Meta-Llama-3.1-70B-Instruct-FP8",
@@ -60,7 +59,7 @@ async def getJailbrokenResponse(request: str):
         return obf_result
 
     def purpose_obf(request):
-        with open("purpose2.txt", 'r') as file:
+        with open("./routers/purpose2.txt", 'r') as file:
             mailicious_prompt = file.read()
         transformed_prompt_data = {
             "model": "neuralmagic/Meta-Llama-3.1-70B-Instruct-FP8",
@@ -97,8 +96,5 @@ async def getJailbrokenResponse(request: str):
         else: # "Guns and Illegal Weapons"
             raise NotImplementedError()
 
-    # TODO: call LLM with jailbroken request
-
-    # TODO: return jailbroken response
     result = transform(request)
     return result
